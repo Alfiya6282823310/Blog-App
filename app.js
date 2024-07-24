@@ -36,12 +36,34 @@ app.post("/viewall",(req,res)=>{
                 }
             ).catch(
                 (error)=>{
-                    res.json({"status":"success"})
+                    res.json({"status":"error"})
                 }
             )
         }else{
             res.json({"status":"invalid authentication"})
         }
+    })
+})
+//view my post
+app.post("/viewmypost",(req,res)=>{
+    let input=req.body
+    let token=req.headers.token
+    jsonwebtoken.verify(token,"blogApp",(error,decoded)=>{
+        if(decoded && decoded.email){
+            postModel.find(input).then(
+                (item)=>{
+                    res.json(item)
+                }
+            ).catch(
+                (error)=>{
+                    res.json({"status":"error"})
+                }
+            )
+
+        }else{
+            res.json({"status":"invalid authentication"})
+        }
+
     })
 })
 //signin
